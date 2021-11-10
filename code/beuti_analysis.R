@@ -14,3 +14,4 @@ windowsize = 10
 beuti_daily <- read.csv("../data/oceanography/BEUTI_daily.csv",header = TRUE) 
 beuti_daily$date <- as.Date(with(beuti_daily, paste(year, month, day,sep="-")), "%Y-%m-%d")
 
+
