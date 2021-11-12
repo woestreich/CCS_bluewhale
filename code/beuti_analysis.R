@@ -55,7 +55,8 @@ beuti_clim$csummean <- rollapply(beuti_clim$csummean,windowsize,mean,fill=NA,na.
 beuti_clim$csum5pctl <- rollapply(beuti_clim$csum5pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 beuti_clim$csum95pctl <- rollapply(beuti_clim$csum95pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 
-## Generate figure
+## Generate Plot A 
+## (Climatological mean upwelling accumulation at 37 N)
 pa <- ggplot(beuti_clim, aes(yday,csummean)) +
   geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey70") +
   geom_line(color="black",size=1,linetype="dashed") +
@@ -71,5 +72,39 @@ pa <- ggplot(beuti_clim, aes(yday,csummean)) +
   annotate("text", label = paste("Climatological","mean"), x = 112, y = 2990) + # part of the legend
   annotate("text", label = paste("Climatological","5th-95th","pctl"), x = 135, y = 2790) # part of the legend
 
-## Display figure
+## Display Plot A
 pa
+
+## Generate Plot B
+## Single-year upwelling accumulation at a given latitude (37 N to start)
+# Select year
+yr = 2015
+byr = beuti_daily %>% filter(year == yr)
+
+# Calculate cumulative sum at a given latitude
+byr$csum <- cumsum(b$X37N) #The latitude of analysis is chosen here
+
+# Apply running mean to cumulative sum of BEUTI
+byr$csummean <- rollapply(byr$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+
+# plot
+pb <- ggplot(beuti_clim, aes(yday,csummean)) +
+  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey70") +
+  geom_line(color="black",size=1,linetype="dashed") +
+  geom_line(data = byr, aes(yday,csummean), color="black", size=1) +
+  ylab("BEUTI cumulative sum\n(mmol/m/s)") +
+  xlab("Yearday") +
+  theme_classic() +
+  theme(legend.position = "none")  +
+  ylim(-150,3300) +
+  ggtitle(paste("37 N,", yr)) +
+  theme(plot.title = element_text(hjust = 0.5)) + # center the title
+  geom_segment(aes(x=0, y=3180, xend=40, yend=3180),size=1,color="black") + # part of the legend
+  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
+  geom_rect(aes(xmin=0,xmax=40,ymin=2700,ymax=2900),color="grey70",fill="grey70") + # part of the legend
+  annotate("text", label = paste("Current","year","(",yr,")"), x = 113, y = 3170) + # part of the legend
+  annotate("text", label = paste("Climatological","mean"), x = 112, y = 2990) + # part of the legend
+  annotate("text", label = paste("Climatological","5th-95th","pctl"), x = 135, y = 2790) # part of the legend
+
+## Display Plot B
+pb
