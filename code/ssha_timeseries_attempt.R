@@ -26,3 +26,5 @@ ssha_timeseries <- ggplot(data = ssha, aes(x=date, y=SSHA)) +
 
 ##Display time series plot
 ssha_timeseries
+
+##edit
