@@ -18,13 +18,25 @@ load("/Users/nataliecross/Desktop/THESIS/data/CCS_bluewhale/data/oceanography/CC
 ssha <- H
 
 ## Generate time series plot
+tiff("ssha_timeseries.tiff",units="in", width=10, height=4, res=400)
 ssha_timeseries <- ggplot(data = ssha, aes(x=date, y=SSHA)) + 
   geom_col() + 
   xlab("year") + 
-  ylab("Sea Surface Height Anomaly") 
-##need to adjust axis and formatting
+  ylab("Sea Surface Height Anomaly") + 
+  ggtitle("Time Series (1992-2020) of Average Sea Surface Height Anomaly")
 
 ##Display time series plot
 ssha_timeseries
+dev.off()
 
-##edit
+##recent timeseries for 2015 - 2020 ssha data 
+recent <- ssha[c(90:113), c(1:2)]
+tiff("ssha_recent.tiff",units="in", width=10, height=4, res=400)
+ssha_recent <- ggplot(data = recent, aes(x=date, y=SSHA)) + 
+  geom_col() + 
+  xlab("year") + 
+  ylab("Sea Surface Height Anomaly") + 
+  ggtitle("Time Series (2015-2020) of Average Sea Surface Height Anomaly")
+ssha_recent
+dev.off()
+

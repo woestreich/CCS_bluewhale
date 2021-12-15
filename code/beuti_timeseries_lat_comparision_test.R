@@ -53,7 +53,6 @@ thirtyone <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("31 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -97,7 +96,6 @@ thirtytwo <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("32 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -141,7 +139,6 @@ thirtythree <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("33 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -185,7 +182,6 @@ thirtyfour <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("34 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -229,7 +225,6 @@ thirtyfive <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("35 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -273,7 +268,6 @@ thirtysix <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("36 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -317,7 +311,6 @@ thirtyseven <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("37 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -361,7 +354,6 @@ thirtyeight <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("38 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -405,7 +397,6 @@ thirtynine <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("39 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -449,7 +440,6 @@ fourty <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("40 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -493,7 +483,6 @@ fourtyone <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("41 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -537,7 +526,6 @@ fourtytwo <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("42 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -581,7 +569,6 @@ fourtythree <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("43 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -625,7 +612,6 @@ fourtyfour <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("44 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -669,7 +655,6 @@ fourtyfive <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("45 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -713,7 +698,6 @@ fourtysix <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("46 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
@@ -757,7 +741,6 @@ fourtyseven <- ggplot(beuti_clim, aes(yday,csummean)) +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
-  ylim(-150,3300) +
   ggtitle("47 N") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
   geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="black",linetype="dashed") + # part of the legend
