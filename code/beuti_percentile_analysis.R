@@ -1,20 +1,12 @@
-###########
-## beuti_summary_plot
+###
+## beuti_percentile_comparision
+# comparing between 4 latitude: 
+  # 34N - S. CA Blight 
+  # 37N - Monterey Bay 
+  # 40N - Mendocino 
+  # 43N - S. Oregon 
 
-## 2015-2020 year comparisions: 
-#   2015 = red 
-#   2016 = orange 
-#   2017 = yellow 
-#   2018 = green
-#   2019 = blue 
-#   2020 = purple 
-
-## four different latitudes: 
-#   34N = S. California Blight
-#   37N = Monterey Bay
-#   40N = Mendocino  
-#   43N = S. Oregon 
-###########
+### 
 
 ## clear variables and load packages
 rm(list = ls())
@@ -33,7 +25,8 @@ windowsize = 10
 beuti_daily <- read.csv("data/oceanography/BEUTI_daily.csv",header = TRUE) 
 beuti_daily$date <- as.Date(with(beuti_daily, paste(year, month, day,sep="-")), "%Y-%m-%d")
 
-## 34N ##
+
+## 34N ## 
 
 ## Calculate cumulative sum of beuti for each year of time series (1988-2020) at 34N
 beuti_daily$yday <- yday(beuti_daily$date)
@@ -47,7 +40,7 @@ for (y in 1988:2020) {
   i1 <- i2 + 1
 }
 
-## calculate long-term climatological mean, 5th percentile, and 95th percentile for cumulative beuti curves 
+## calculate long-term climatological mean for culmulative beuti curves at 34N
 beuti_clim <- data.frame(matrix(ncol = 4, nrow = 366))
 colnames(beuti_clim) <- c("yday","csummean","csum5pctl","csum95pctl")
 for (i in 1:366) {
@@ -63,82 +56,93 @@ beuti_clim$csummean <- rollapply(beuti_clim$csummean,windowsize,mean,fill=NA,na.
 beuti_clim$csum5pctl <- rollapply(beuti_clim$csum5pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 beuti_clim$csum95pctl <- rollapply(beuti_clim$csum95pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 
-## Generate Plot A
-## 2015-2020 upwelling accumulation at a 34N 
-#2015
+
+## 2015 ##
+#upwelling accumulation 
 yr15 = 2015
 byr15 = beuti_daily %>% filter(year == yr15)
 byr15$csum <- cumsum(b$X34N) 
 byr15$csummean <- rollapply(byr15$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
-#2016
+# average upwelling 
+mean15 <- mean(byr15$csummean, na.rm = TRUE)
+
+# percentile
+percentile_15_34 <- ecdf(beuti_clim$csummean)(mean15)
+
+
+## 2016 ##
+#upwelling accumulation 
 yr16 = 2016
 byr16 = beuti_daily %>% filter(year == yr16)
 byr16$csum <- cumsum(b$X34N) 
 byr16$csummean <- rollapply(byr16$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
-#2017
+# average upwelling 
+mean16 <- mean(byr16$csummean, na.rm = TRUE)
+
+# percentile
+percentile_16_34 <- ecdf(beuti_clim$csummean)(mean16)
+
+
+## 2017 ##
+#upwelling accumulation 
 yr17 = 2017
 byr17 = beuti_daily %>% filter(year == yr17)
 byr17$csum <- cumsum(b$X34N) 
 byr17$csummean <- rollapply(byr17$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
-#2018
+# average upwelling 
+mean17 <- mean(byr17$csummean, na.rm = TRUE)
+
+# percentile
+percentile_17_34 <- ecdf(beuti_clim$csummean)(mean17)
+
+
+## 2018 ##
+#upwelling accumulation 
 yr18 = 2018
 byr18 = beuti_daily %>% filter(year == yr18)
 byr18$csum <- cumsum(b$X34N) 
 byr18$csummean <- rollapply(byr18$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
-#2019
+# average upwelling 
+mean18 <- mean(byr18$csummean, na.rm = TRUE)
+
+# percentile
+percentile_18_34 <- ecdf(beuti_clim$csummean)(mean18)
+
+
+## 2019 ##
+#upwelling accumulation 
 yr19 = 2019
 byr19 = beuti_daily %>% filter(year == yr19)
 byr19$csum <- cumsum(b$X34N) 
 byr19$csummean <- rollapply(byr19$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
-#2020
+# average upwelling 
+mean19 <- mean(byr19$csummean, na.rm = TRUE)
+
+# percentile
+percentile_19_34 <- ecdf(beuti_clim$csummean)(mean19)
+
+
+## 2020 ##
+#upwelling accumulation 
 yr20 = 2020
 byr20 = beuti_daily %>% filter(year == yr20)
 byr20$csum <- cumsum(b$X34N) 
 byr20$csummean <- rollapply(byr20$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
-## plotA
-plotA <- ggplot(beuti_clim, aes(yday,csummean)) +   
-  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey80") +
-  #2015 line
-  geom_line(data = byr15, aes(yday,csummean), color="tomato", size=1) +
-  #2016 line
-  geom_line(data = byr16, aes(yday,csummean), color="darkorange", size=1) +
-  #2017 line
-  geom_line(data = byr17, aes(yday,csummean), color="darkgoldenrod1", size=1) +
-  #2018 line
-  geom_line(data = byr18, aes(yday,csummean), color="forestgreen", size=1) +
-  #2019 line
-  geom_line(data = byr19, aes(yday,csummean), color="cornflowerblue", size=1) +
-  #2020 line
-  geom_line(data = byr20, aes(yday,csummean), color="mediumorchid4", size=1) +
-  ylab("BEUTI cumulative sum\n(mmol/m/s)") +
-  xlab("Yearday") +
-  theme_classic() +
-  theme(legend.position = "none")  +
-  ggtitle("34 N (2015-2020)") +
-  theme(plot.title = element_text(hjust = 0.5)) + # center the title
-  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="tomato") + 
-  annotate("text", x = 60, y = 3200, label = "2015") + 
-  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="darkorange") + 
-  annotate("text", x = 60, y = 3000, label = "2016") +
-  geom_segment(aes(x=0, y=2800, xend=40, yend=2800),size=1,color="darkgoldenrod1") + 
-  annotate("text", x = 60, y = 2800, label = "2017") +
-  geom_segment(aes(x=0, y=2600, xend=40, yend=2600),size=1,color="forestgreen") +
-  annotate("text", x = 60, y = 2600, label = "2018") +
-  geom_segment(aes(x=0, y=2400, xend=40, yend=2400),size=1,color="cornflowerblue") + 
-  annotate("text", x = 60, y = 2400, label = "2019") +
-  geom_segment(aes(x=0, y=2200, xend=40, yend=2200),size=1,color="mediumorchid4") + 
-  annotate("text", x = 60, y = 2200, label = "2020") +
-  geom_rect(aes(xmin=0,xmax=40,ymin=3400,ymax=3600),color="grey80",fill="grey80") + 
-  annotate("text", x = 108, y = 3500, label = "Climatological 5th-95th pctl")
+# average upwelling 
+mean20 <- mean(byr20$csummean, na.rm = TRUE)
+
+# percentile
+percentile_20_34 <- ecdf(beuti_clim$csummean)(mean20)
 
 
-## 37N ##
+
+## 37N ## 
 
 ## Calculate cumulative sum of beuti for each year of time series (1988-2020) at 37N
 beuti_daily$yday <- yday(beuti_daily$date)
@@ -152,7 +156,7 @@ for (y in 1988:2020) {
   i1 <- i2 + 1
 }
 
-## calculate long-term climatological mean, 5th percentile, and 95th percentile for cumulative beuti curves 
+## calculate long-term climatological mean for culmulative beuti curves at 37N
 beuti_clim <- data.frame(matrix(ncol = 4, nrow = 366))
 colnames(beuti_clim) <- c("yday","csummean","csum5pctl","csum95pctl")
 for (i in 1:366) {
@@ -168,82 +172,80 @@ beuti_clim$csummean <- rollapply(beuti_clim$csummean,windowsize,mean,fill=NA,na.
 beuti_clim$csum5pctl <- rollapply(beuti_clim$csum5pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 beuti_clim$csum95pctl <- rollapply(beuti_clim$csum95pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 
-## Generate Plot B
-## 2015-2020 upwelling accumulation at a 37N 
-#2015
+
+## 2015 ##
+#upwelling accumulation 
 yr15 = 2015
 byr15 = beuti_daily %>% filter(year == yr15)
 byr15$csum <- cumsum(b$X37N) 
 byr15$csummean <- rollapply(byr15$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean15 <- mean(byr15$csummean, na.rm = TRUE)
+# percentile
+percentile_15_37 <- ecdf(beuti_clim$csummean)(mean15)
 
-#2016
+
+## 2016 ##
+#upwelling accumulation 
 yr16 = 2016
 byr16 = beuti_daily %>% filter(year == yr16)
 byr16$csum <- cumsum(b$X37N) 
 byr16$csummean <- rollapply(byr16$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean16 <- mean(byr16$csummean, na.rm = TRUE)
+# percentile
+percentile_16_37 <- ecdf(beuti_clim$csummean)(mean16)
 
-#2017
+
+## 2017 ##
+#upwelling accumulation 
 yr17 = 2017
 byr17 = beuti_daily %>% filter(year == yr17)
 byr17$csum <- cumsum(b$X37N) 
 byr17$csummean <- rollapply(byr17$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean17 <- mean(byr17$csummean, na.rm = TRUE)
+# percentile
+percentile_17_37 <- ecdf(beuti_clim$csummean)(mean17)
 
-#2018
+
+## 2018 ##
+#upwelling accumulation 
 yr18 = 2018
 byr18 = beuti_daily %>% filter(year == yr18)
 byr18$csum <- cumsum(b$X37N) 
 byr18$csummean <- rollapply(byr18$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean18 <- mean(byr18$csummean, na.rm = TRUE)
+# percentile
+percentile_18_37 <- ecdf(beuti_clim$csummean)(mean18)
 
-#2019
+
+## 2019 ##
+#upwelling accumulation 
 yr19 = 2019
 byr19 = beuti_daily %>% filter(year == yr19)
 byr19$csum <- cumsum(b$X37N) 
 byr19$csummean <- rollapply(byr19$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean19 <- mean(byr19$csummean, na.rm = TRUE)
+# percentile
+percentile_19_37 <- ecdf(beuti_clim$csummean)(mean19)
 
-#2020
+
+## 2020 ##
+#upwelling accumulation 
 yr20 = 2020
 byr20 = beuti_daily %>% filter(year == yr20)
 byr20$csum <- cumsum(b$X37N) 
 byr20$csummean <- rollapply(byr20$csum,windowsize,mean,fill=NA,na.rm = TRUE)
-
-## plotB
-plotB <- ggplot(beuti_clim, aes(yday,csummean)) +   
-  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey80") +
-  #2015 line
-  geom_line(data = byr15, aes(yday,csummean), color="tomato", size=1) +
-  #2016 line
-  geom_line(data = byr16, aes(yday,csummean), color="darkorange", size=1) +
-  #2017 line
-  geom_line(data = byr17, aes(yday,csummean), color="darkgoldenrod1", size=1) +
-  #2018 line
-  geom_line(data = byr18, aes(yday,csummean), color="forestgreen", size=1) +
-  #2019 line
-  geom_line(data = byr19, aes(yday,csummean), color="cornflowerblue", size=1) +
-  #2020 line
-  geom_line(data = byr20, aes(yday,csummean), color="mediumorchid4", size=1) +
-  ylab("BEUTI cumulative sum\n(mmol/m/s)") +
-  xlab("Yearday") +
-  theme_classic() +
-  theme(legend.position = "none")  +
-  ggtitle("37 N (2015-2020)") +
-  theme(plot.title = element_text(hjust = 0.5)) + # center the title
-  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="tomato") + 
-    annotate("text", x = 60, y = 3200, label = "2015") + 
-  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="darkorange") + 
-    annotate("text", x = 60, y = 3000, label = "2016") +
-  geom_segment(aes(x=0, y=2800, xend=40, yend=2800),size=1,color="darkgoldenrod1") + 
-    annotate("text", x = 60, y = 2800, label = "2017") +
-  geom_segment(aes(x=0, y=2600, xend=40, yend=2600),size=1,color="forestgreen") +
-    annotate("text", x = 60, y = 2600, label = "2018") +
-  geom_segment(aes(x=0, y=2400, xend=40, yend=2400),size=1,color="cornflowerblue") + 
-    annotate("text", x = 60, y = 2400, label = "2019") +
-  geom_segment(aes(x=0, y=2200, xend=40, yend=2200),size=1,color="mediumorchid4") + 
-    annotate("text", x = 60, y = 2200, label = "2020") +
-  geom_rect(aes(xmin=0,xmax=40,ymin=3400,ymax=3600),color="grey80",fill="grey80") + 
-    annotate("text", x = 108, y = 3500, label = "Climatological 5th-95th pctl")
+# average upwelling 
+mean20 <- mean(byr20$csummean, na.rm = TRUE)
+# percentile
+percentile_20_37 <- ecdf(beuti_clim$csummean)(mean20)
 
 
-## 40N ##
+## 40N ## 
 
 ## Calculate cumulative sum of beuti for each year of time series (1988-2020) at 40N
 beuti_daily$yday <- yday(beuti_daily$date)
@@ -257,7 +259,7 @@ for (y in 1988:2020) {
   i1 <- i2 + 1
 }
 
-## calculate long-term climatological mean, 5th percentile, and 95th percentile for cumulative beuti curves 
+## calculate long-term climatological mean for culmulative beuti curves at 40N
 beuti_clim <- data.frame(matrix(ncol = 4, nrow = 366))
 colnames(beuti_clim) <- c("yday","csummean","csum5pctl","csum95pctl")
 for (i in 1:366) {
@@ -273,79 +275,77 @@ beuti_clim$csummean <- rollapply(beuti_clim$csummean,windowsize,mean,fill=NA,na.
 beuti_clim$csum5pctl <- rollapply(beuti_clim$csum5pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 beuti_clim$csum95pctl <- rollapply(beuti_clim$csum95pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 
-## Generate Plot C
-## 2015-2020 upwelling accumulation at a 40N 
-#2015
+
+## 2015 ##
+#upwelling accumulation 
 yr15 = 2015
 byr15 = beuti_daily %>% filter(year == yr15)
 byr15$csum <- cumsum(b$X40N) 
 byr15$csummean <- rollapply(byr15$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean15 <- mean(byr15$csummean, na.rm = TRUE)
+# percentile
+percentile_15_40 <- ecdf(beuti_clim$csummean)(mean15)
 
-#2016
+
+## 2016 ##
+#upwelling accumulation 
 yr16 = 2016
 byr16 = beuti_daily %>% filter(year == yr16)
 byr16$csum <- cumsum(b$X40N) 
 byr16$csummean <- rollapply(byr16$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean16 <- mean(byr16$csummean, na.rm = TRUE)
+# percentile
+percentile_16_40 <- ecdf(beuti_clim$csummean)(mean16)
 
-#2017
+
+## 2017 ##
+#upwelling accumulation 
 yr17 = 2017
 byr17 = beuti_daily %>% filter(year == yr17)
 byr17$csum <- cumsum(b$X40N) 
 byr17$csummean <- rollapply(byr17$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean17 <- mean(byr17$csummean, na.rm = TRUE)
+# percentile
+percentile_17_40 <- ecdf(beuti_clim$csummean)(mean17)
 
-#2018
+
+## 2018 ##
+#upwelling accumulation 
 yr18 = 2018
 byr18 = beuti_daily %>% filter(year == yr18)
 byr18$csum <- cumsum(b$X40N) 
 byr18$csummean <- rollapply(byr18$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean18 <- mean(byr18$csummean, na.rm = TRUE)
+# percentile
+percentile_18_40 <- ecdf(beuti_clim$csummean)(mean18)
 
-#2019
+
+## 2019 ##
+#upwelling accumulation 
 yr19 = 2019
 byr19 = beuti_daily %>% filter(year == yr19)
 byr19$csum <- cumsum(b$X40N) 
 byr19$csummean <- rollapply(byr19$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean19 <- mean(byr19$csummean, na.rm = TRUE)
+# percentile
+percentile_19_40 <- ecdf(beuti_clim$csummean)(mean19)
 
-#2020
+
+## 2020 ##
+#upwelling accumulation 
 yr20 = 2020
 byr20 = beuti_daily %>% filter(year == yr20)
 byr20$csum <- cumsum(b$X40N) 
 byr20$csummean <- rollapply(byr20$csum,windowsize,mean,fill=NA,na.rm = TRUE)
-
-## plotC
-plotC <- ggplot(beuti_clim, aes(yday,csummean)) +   
-  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey80") +
-  #2015 line
-  geom_line(data = byr15, aes(yday,csummean), color="tomato", size=1) +
-  #2016 line
-  geom_line(data = byr16, aes(yday,csummean), color="darkorange", size=1) +
-  #2017 line
-  geom_line(data = byr17, aes(yday,csummean), color="darkgoldenrod1", size=1) +
-  #2018 line
-  geom_line(data = byr18, aes(yday,csummean), color="forestgreen", size=1) +
-  #2019 line
-  geom_line(data = byr19, aes(yday,csummean), color="cornflowerblue", size=1) +
-  #2020 line
-  geom_line(data = byr20, aes(yday,csummean), color="mediumorchid4", size=1) +
-  ylab("BEUTI cumulative sum\n(mmol/m/s)") +
-  xlab("Yearday") +
-  theme_classic() +
-  theme(legend.position = "none")  +
-  ggtitle("40 N (2015-2020)") +
-  theme(plot.title = element_text(hjust = 0.5)) + # center the title
-  geom_segment(aes(x=0, y=5200, xend=40, yend=5200),size=1,color="tomato") + 
-  annotate("text", x = 60, y = 5200, label = "2015") + 
-  geom_segment(aes(x=0, y=4800, xend=40, yend=4800),size=1,color="darkorange") + 
-  annotate("text", x = 60, y = 4800, label = "2016") +
-  geom_segment(aes(x=0, y=4400, xend=40, yend=4400),size=1,color="darkgoldenrod1") + 
-  annotate("text", x = 60, y = 4400, label = "2017") +
-  geom_segment(aes(x=0, y=4000, xend=40, yend=4000),size=1,color="forestgreen") +
-  annotate("text", x = 60, y = 4000, label = "2018") +
-  geom_segment(aes(x=0, y=3600, xend=40, yend=3600),size=1,color="cornflowerblue") + 
-  annotate("text", x = 60, y = 3600, label = "2019") +
-  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="mediumorchid4") + 
-  annotate("text", x = 60, y = 3200, label = "2020") +
-  geom_rect(aes(xmin=0,xmax=40,ymin=5600,ymax=5800),color="grey80",fill="grey80") + 
-  annotate("text", x = 108, y = 5700, label = "Climatological 5th-95th pctl")
+# average upwelling 
+mean20 <- mean(byr20$csummean, na.rm = TRUE)
+# percentile
+percentile_20_40 <- ecdf(beuti_clim$csummean)(mean20)
 
 
 ## 43N ## 
@@ -362,7 +362,7 @@ for (y in 1988:2020) {
   i1 <- i2 + 1
 }
 
-## calculate long-term climatological mean, 5th percentile, and 95th percentile for cumulative beuti curves 
+## calculate long-term climatological mean for culmulative beuti curves at 43N
 beuti_clim <- data.frame(matrix(ncol = 4, nrow = 366))
 colnames(beuti_clim) <- c("yday","csummean","csum5pctl","csum95pctl")
 for (i in 1:366) {
@@ -378,81 +378,107 @@ beuti_clim$csummean <- rollapply(beuti_clim$csummean,windowsize,mean,fill=NA,na.
 beuti_clim$csum5pctl <- rollapply(beuti_clim$csum5pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 beuti_clim$csum95pctl <- rollapply(beuti_clim$csum95pctl,windowsize,mean,fill=NA,na.rm = TRUE)
 
-## Generate Plot D
-## 2015-2020 upwelling accumulation at a 43N 
-#2015
+
+## 2015 ##
+#upwelling accumulation 
 yr15 = 2015
 byr15 = beuti_daily %>% filter(year == yr15)
 byr15$csum <- cumsum(b$X43N) 
 byr15$csummean <- rollapply(byr15$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean15 <- mean(byr15$csummean, na.rm = TRUE)
+# percentile
+percentile_15_43 <- ecdf(beuti_clim$csummean)(mean15)
 
-#2016
+
+## 2016 ##
+#upwelling accumulation 
 yr16 = 2016
 byr16 = beuti_daily %>% filter(year == yr16)
 byr16$csum <- cumsum(b$X43N) 
 byr16$csummean <- rollapply(byr16$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean16 <- mean(byr16$csummean, na.rm = TRUE)
+# percentile
+percentile_16_43 <- ecdf(beuti_clim$csummean)(mean16)
 
-#2017
+
+## 2017 ##
+#upwelling accumulation 
 yr17 = 2017
 byr17 = beuti_daily %>% filter(year == yr17)
 byr17$csum <- cumsum(b$X43N) 
 byr17$csummean <- rollapply(byr17$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean17 <- mean(byr17$csummean, na.rm = TRUE)
+# percentile
+percentile_17_43 <- ecdf(beuti_clim$csummean)(mean17)
 
-#2018
+
+## 2018 ##
+#upwelling accumulation 
 yr18 = 2018
 byr18 = beuti_daily %>% filter(year == yr18)
 byr18$csum <- cumsum(b$X43N) 
 byr18$csummean <- rollapply(byr18$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean18 <- mean(byr18$csummean, na.rm = TRUE)
+# percentile
+percentile_18_43 <- ecdf(beuti_clim$csummean)(mean18)
 
-#2019
+
+## 2019 ##
+#upwelling accumulation 
 yr19 = 2019
 byr19 = beuti_daily %>% filter(year == yr19)
 byr19$csum <- cumsum(b$X43N) 
 byr19$csummean <- rollapply(byr19$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean19 <- mean(byr19$csummean, na.rm = TRUE)
+# percentile
+percentile_19_43 <- ecdf(beuti_clim$csummean)(mean19)
 
-#2020
+
+## 2020 ##
+#upwelling accumulation 
 yr20 = 2020
 byr20 = beuti_daily %>% filter(year == yr20)
 byr20$csum <- cumsum(b$X43N) 
 byr20$csummean <- rollapply(byr20$csum,windowsize,mean,fill=NA,na.rm = TRUE)
+# average upwelling 
+mean20 <- mean(byr20$csummean, na.rm = TRUE)
+# percentile
+percentile_20_43 <- ecdf(beuti_clim$csummean)(mean20)
 
-## plotD
-plotD <- ggplot(beuti_clim, aes(yday,csummean)) +   
-  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey80") +
-  #2015 line
-  geom_line(data = byr15, aes(yday,csummean), color="tomato", size=1) +
-  #2016 line
-  geom_line(data = byr16, aes(yday,csummean), color="darkorange", size=1) +
-  #2017 line
-  geom_line(data = byr17, aes(yday,csummean), color="darkgoldenrod1", size=1) +
-  #2018 line
-  geom_line(data = byr18, aes(yday,csummean), color="forestgreen", size=1) +
-  #2019 line
-  geom_line(data = byr19, aes(yday,csummean), color="cornflowerblue", size=1) +
-  #2020 line
-  geom_line(data = byr20, aes(yday,csummean), color="mediumorchid4", size=1) +
-  ylab("BEUTI cumulative sum\n(mmol/m/s)") +
-  xlab("Yearday") +
-  theme_classic() +
-  theme(legend.position = "none")  +
-  ggtitle("43 N (2015-2020)") +
-  theme(plot.title = element_text(hjust = 0.5)) + # center the title
-  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="tomato") + 
-  annotate("text", x = 60, y = 3200, label = "2015") + 
-  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="darkorange") + 
-  annotate("text", x = 60, y = 3000, label = "2016") +
-  geom_segment(aes(x=0, y=2800, xend=40, yend=2800),size=1,color="darkgoldenrod1") + 
-  annotate("text", x = 60, y = 2800, label = "2017") +
-  geom_segment(aes(x=0, y=2600, xend=40, yend=2600),size=1,color="forestgreen") +
-  annotate("text", x = 60, y = 2600, label = "2018") +
-  geom_segment(aes(x=0, y=2400, xend=40, yend=2400),size=1,color="cornflowerblue") + 
-  annotate("text", x = 60, y = 2400, label = "2019") +
-  geom_segment(aes(x=0, y=2200, xend=40, yend=2200),size=1,color="mediumorchid4") + 
-  annotate("text", x = 60, y = 2200, label = "2020") +
-  geom_rect(aes(xmin=0,xmax=40,ymin=3400,ymax=3600),color="grey80",fill="grey80") + 
-  annotate("text", x = 108, y = 3500, label = "Climatological 5th-95th pctl")
 
-##print plots
-(plotA + plotB) / (plotC + plotD)
+## dataframe 
+percentiles <-data.frame("year" = c(2015, 2016, 2017, 2018, 2019, 2020), 
+                         "perc_34" = c(percentile_15_34, percentile_16_34, percentile_17_34, percentile_18_34, percentile_19_34, percentile_20_34),
+                         "perc_37" = c(percentile_15_37, percentile_16_37, percentile_17_37, percentile_18_37, percentile_19_37, percentile_20_37), 
+                         "perc_40" = c(percentile_15_40, percentile_16_40, percentile_17_40, percentile_18_40, percentile_19_40, percentile_20_40), 
+                         "perc_43" = c(percentile_15_43, percentile_16_43, percentile_17_43, percentile_18_43, percentile_19_43, percentile_20_43))
 
+##graph 
+
+Percentiles <- ggplot(percentiles, aes(year, (perc_34:perc_40))) + 
+  #34N line
+  geom_line(data = percentiles, aes(year, perc_34), color = "tomato", size=1) + 
+  #37N line
+  geom_line(data = percentiles, aes(year, perc_37), color = "forestgreen", size=1) + 
+  #40N line
+  geom_line(data = percentiles, aes(year, perc_40), color = "cornflowerblue", size=1) + 
+  #43N line
+  geom_line(data = percentiles, aes(year, perc_43), color = "mediumorchid4", size=1) + 
+  ylab("Percentile") + 
+  ggtitle("Comparision of BEUTI Percentiles at Latitudes Along the CA Current") + 
+  geom_segment(aes(x=2015, y=.99, xend=2015.5, yend=.99),size=1,color="tomato") + 
+  annotate("text", x = 2015.8, y = .99, label = "34N") + 
+  geom_segment(aes(x=2015, y=.96, xend=2015.5, yend=.96),size=1,color="forestgreen") + 
+  annotate("text", x = 2015.8, y = .96, label = "37N") +
+  geom_segment(aes(x=2015, y=.93, xend=2015.5, yend=.93),size=1,color="cornflowerblue") + 
+  annotate("text", x = 2015.8, y = .93, label = "40N") +
+  geom_segment(aes(x=2015, y=.90, xend=2015.5, yend=.90),size=1,color="mediumorchid4") +
+  annotate("text", x = 2015.8, y = .90, label = "43N")
+  
+Percentiles
 
