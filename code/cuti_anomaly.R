@@ -93,51 +93,45 @@ cuti_anomaly$csum_38 <- sum$csum_38
 ## season 1 
 s1 = 1
 s1 = sum %>% filter(season == s1)
-s1$csum <- cumsum(s1$csum_37) 
-s1_37_avg <- (s1$csum[34])/34 
+s1_37_avg <- mean(s1$csum_37)
 
 ## season 2
 s2 = 2
 s2 = sum %>% filter(season == s2)
-s2$csum <- cumsum(s2$csum_37) 
-s2_37_avg <- (s2$csum[34])/34 
+s2_37_avg <- mean(s2$csum_37)
 
 #season 3
 s3 = 3
 s3 = sum %>% filter(season == s3)
-s3$csum <- cumsum(s3$csum_37) 
-s3_37_avg <- (s3$csum[34])/34 
+s3_37_avg <- mean(s3$csum_37)
 
 #season 4
 s4 = 4
 s4 = sum %>% filter(season == s4)
-s4$csum <- cumsum(s4$csum_37) 
-s4_37_avg <- (s4$csum[34])/34 
+s4_37_avg <- mean(s4$csum_37)
+
 
 ## 38N ## 
 ## season 1 
 s1 = 1
 s1 = sum %>% filter(season == s1)
-s1$csumm <- cumsum(s1$csum_38) 
-s1_38_avg <- (s1$csumm[34])/34 
+s1_38_avg <- mean(s1$csum_38)
 
 ## season 2
 s2 = 2
 s2 = sum %>% filter(season == s2)
-s2$csumm <- cumsum(s2$csum_38) 
-s2_38_avg <- (s2$csumm[34])/34 
+s2_38_avg <- mean(s2$csum_38)
 
 #season 3
 s3 = 3
 s3 = sum %>% filter(season == s3)
-s3$csumm <- cumsum(s3$csum_38) 
-s3_38_avg <- (s3$csumm[34])/34 
+s3_38_avg <- mean(s3$csum_38)
 
 #season 4
 s4 = 4
 s4 = sum %>% filter(season == s4)
-s4$csumm <- cumsum(s4$csum_38) 
-s4_38_avg <- (s4$csumm[34])/34 
+s4_38_avg <- mean(s4$csum_38)
+
 
 ## transfer over to anomaly data frame 
 cuti_anomaly$avg_csum_37 <- rep(c(s1_37_avg, s2_37_avg, s3_37_avg, s4_37_avg), times = 34)
