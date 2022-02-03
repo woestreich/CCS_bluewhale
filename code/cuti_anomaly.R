@@ -46,6 +46,9 @@ cuti_anomaly$year <- rep(1988:2021, each = 4)
 ## set seasons 
 cuti_anomaly$season <- rep(c(1, 2, 3, 4), times=34)
 
+## combine year and season columns 
+cuti_anomaly$year_season <- paste(cuti_anomaly$year, "-", cuti_anomaly$season)
+
 ## calculate cumulative sum for each season 
 ## 37N ## 
 cuti_daily$yday <- yday(cuti_daily$date)
@@ -141,6 +144,17 @@ cuti_anomaly$avg_csum_38 <- rep(c(s1_38_avg, s2_38_avg, s3_38_avg, s4_38_avg), t
 cuti_anomaly$anomaly_37 <- (cuti_anomaly$csum_37) - (cuti_anomaly$avg_csum_37) 
 cuti_anomaly$anomaly_38 <- (cuti_anomaly$csum_38) - (cuti_anomaly$avg_csum_38) 
 
+## plot of cuti anomalies 1988 - 2021  
+cuti_anomaly %>%
+  pivot_longer(cols = starts_with("anomaly"), names_to = "latitude", names_prefix = "anomaly_", values_to = "anomaly") %>%
+  ggplot(aes(x = year_season, y = anomaly, fill = latitude)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  scale_x_discrete(name = "year", breaks = 34, labels = c("1988:2021"))
 
-
+## plot of cuti anomalies 2015 - 2018
+cuti_anomaly %>% filter(year >= 2015 & year <= 2018) %>%
+  pivot_longer(cols = starts_with("anomaly"), names_to = "latitude", names_prefix = "anomaly_", values_to = "anomaly") %>%
+  ggplot(aes(x = year_season, y = anomaly, fill = latitude)) + 
+  geom_bar(stat = "identity", position = "dodge") 
+scale_x_discrete(name = "year", breaks = 4, labels = c("2015:2018")) 
 

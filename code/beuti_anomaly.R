@@ -38,7 +38,7 @@ beuti_daily <- mutate(beuti_daily, season = derivedFactor(
 ))
 
 ## create new dataframe for anomalies specifically at 37N and 38N 
-## 136 rows becuase it's a 34 year time span, 1988-2021, with four seasons per year 
+## 136 rows because it's a 34 year time span, 1988-2021, with four seasons per year 
 beuti_anomaly <- data.frame(matrix(ncol = 8, nrow = 136))
 colnames(beuti_anomaly) <- c("year", "season", "csum_37", "avg_csum_37", "anomaly_37", "csum_38", "avg_csum_38", "anomaly_38")
 
@@ -47,6 +47,9 @@ beuti_anomaly$year <- rep(1988:2021, each = 4)
 
 ## set seasons 
 beuti_anomaly$season <- rep(c(1, 2, 3, 4), times=34)
+
+## combine year and season columns 
+beuti_anomaly$year_season <- paste(beuti_anomaly$year, "-", beuti_anomaly$season)
 
 ## calculate cumulative sum for each season 
 ## 37N ## 
@@ -143,10 +146,18 @@ beuti_anomaly$anomaly_37 <- (beuti_anomaly$csum_37) - (beuti_anomaly$avg_csum_37
 beuti_anomaly$anomaly_38 <- (beuti_anomaly$csum_38) - (beuti_anomaly$avg_csum_38) 
 
 
+## plot of beuti anomalies 1988 - 2021  
+beuti_anomaly %>%
+  pivot_longer(cols = starts_with("anomaly"), names_to = "latitude", names_prefix = "anomaly_", values_to = "anomaly") %>%
+  ggplot(aes(x = year_season, y = anomaly, fill = latitude)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  scale_x_discrete(name = "year", breaks = 34, labels = c("1988:2021"))
 
-## plot 
+## plot of beuti anomalies 2015 - 2018
+beuti_anomaly %>% filter(year >= 2015 & year <= 2018) %>%
+  pivot_longer(cols = starts_with("anomaly"), names_to = "latitude", names_prefix = "anomaly_", values_to = "anomaly") %>%
+  ggplot(aes(x = year_season, y = anomaly, fill = latitude)) + 
+  geom_bar(stat = "identity", position = "dodge") 
+  scale_x_discrete(name = "year", breaks = 4, labels = c("2015:2018")) 
 
-beuti_anomalies <- ggplot(data = beuti_anomaly) + 
-  geom_col(aes(year, anomaly_37), fill = "cornflowerblue") + 
-  geom_col(aes(year, anomaly_38), fill = "mediumorchid4") 
-beuti_anomalies
+
