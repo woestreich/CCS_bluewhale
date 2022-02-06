@@ -165,3 +165,23 @@ beuti_anomaly %>% filter(year >= 2015 & year <= 2018) %>%
   ggtitle("BEUTI Anomaly Comparision") 
 
 
+## add percentiles to dataframe 
+
+beuti_anomaly$percentile_37 <- ecdf(beuti_anomaly$anomaly_37)(beuti_anomaly$anomaly_37)
+beuti_anomaly$percentile_38 <- ecdf(beuti_anomaly$anomaly_38)(beuti_anomaly$anomaly_38)
+
+
+## graph anomaly distribution as a check 
+anomaly_37_distribution <- ggplot(beuti_anomaly, aes(x = anomaly_37)) + geom_density()
+anomaly_38_distribution <- ggplot(beuti_anomaly, aes(x = anomaly_38)) + geom_density()
+
+## compare anomaly percentiles 
+beuti_anomaly %>% filter(year >= 2015 & year <= 2018) %>%
+  pivot_longer(cols = starts_with("percentile"), names_to = "latitude", names_prefix = "percentile_", values_to = "percentile") %>%
+  ggplot(aes(x = year_season, y = percentile, group = latitude)) + 
+  geom_line(aes(color = latitude)) + 
+  scale_color_manual(name = "Region", labels = c("Monterey Bay", "Cordell Bank"), values = c("#00BFC4", "#F8766D")) +
+  guides(fill = guide_legend(reverse = TRUE)) + 
+  ggtitle("Anomaly Percentile Comparision") 
+  
+
