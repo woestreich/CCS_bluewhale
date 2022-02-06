@@ -156,8 +156,12 @@ beuti_anomaly %>%
 ## plot of beuti anomalies 2015 - 2018
 beuti_anomaly %>% filter(year >= 2015 & year <= 2018) %>%
   pivot_longer(cols = starts_with("anomaly"), names_to = "latitude", names_prefix = "anomaly_", values_to = "anomaly") %>%
-  ggplot(aes(x = year_season, y = anomaly, fill = latitude)) + 
-  geom_bar(stat = "identity", position = "dodge") 
-  scale_x_discrete(name = "year", breaks = 4, labels = c("2015:2018")) 
+  ggplot(aes(x = year_season, y = anomaly, fill = as.factor(latitude))) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  ylab("BEUTI upwelling index anomaly") + 
+  xlab("Season") + 
+  scale_fill_manual(name = "Region", labels = c("Monterey Bay", "Cordell Bank"), values = c("#00BFC4", "#F8766D")) +
+  guides(fill = guide_legend(reverse = TRUE)) + 
+  ggtitle("BEUTI Anomaly Comparision") 
 
 
