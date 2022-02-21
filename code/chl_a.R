@@ -43,8 +43,8 @@ for (y in 2015:2018) {
     monterey_avgs <- rbind(monterey_avgs,currAverage)
   }
 }
-monterey_avgs$date <- paste(monterey_avgs$y,"-",monterey_avgs$m)
-monterey_avgs$date <- as.Date(monterey_avgs$date, "%Y-%b")
+monterey_avgs$date <- paste(monterey_avgs$y, "-", monterey_avgs$m)
+#monterey_avgs$date <- as.Date(monterey_avgs$date, "%y-%m")
 
 ## CORDELL BANK ## 
 
