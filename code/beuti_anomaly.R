@@ -184,4 +184,5 @@ beuti_anomaly %>% filter(year >= 2015 & year <= 2018) %>%
   guides(fill = guide_legend(reverse = TRUE)) + 
   ggtitle("Anomaly Percentile Comparision") 
   
-
+test <- beuti_anomaly %>% filter(year >= 2015 & year <= 2018) %>%
+  pivot_longer(cols = starts_with("anomaly"), names_to = "latitude", names_prefix = "anomaly_", values_to = "anomaly") 
