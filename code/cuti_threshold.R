@@ -21,5 +21,51 @@ windowsize = 10
 
 ## load in daily cuti (from Jacox et al., 2018)
 cuti_daily <- read.csv("data/oceanography/cuti_daily_nov2021.csv",header = TRUE) 
+cuti_daily$date <- as.Date(with(cuti_daily, paste(year, month, day,sep="-")), "%Y-%m-%d")
+
+## filter to only include July - December CUTI data, as that's the time region in which CUTI is most influential for the aggregation of prey
+cuti_fallwinter <- cuti_daily %>% filter(month >= 7 & month <= 12)
+
+## create new columns that indicate if the CUTI value is above the 0.5 significance threshold, for both Monterey Bay (37N) and Cordell Bank (38N)
+cuti_fallwinter <- cuti_fallwinter %>% mutate(monterey=(X37N>=0.5))
+cuti_fallwinter <- cuti_fallwinter %>% mutate(cordell=(X38N>=0.5))
+
+## find percentile above 0.5 threshold for each location for each year 
+monterey <- cuti_fallwinter %>% group_by(year) %>% summarise(m_percent = 100*mean(monterey))
+cordell <- cuti_fallwinter %>% group_by(year) %>% summarise(c_percent = 100*mean(cordell))
+
+## plot these percentiles
+percents <- cbind(monterey, cordell$c_percent)
+colnames(percents) <- c('year', 'percent_monterey', 'percent_cordell')
+percents %>% filter(year >= 2015 & year <= 2018) %>%
+  pivot_longer(cols = starts_with("percent"), names_to = "region", names_prefix = "percent_", values_to = "percent") %>%
+  ggplot(aes(x = year, y = percent, fill = as.factor(region))) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  ylab("Percent of Days (Jul-Dec) Above 0.5 CUTI Threshold") + 
+  xlab("Year") + 
+  scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#F8766D", "#00BFC4")) +
+  ggtitle("CUTI Threshold Comparision") 
+
+## plot CUTI trend w/ threshold line 
+windowsize = 10
+# Monterey Bay 
+cuti_fallwinter$X37N <- rollapply(cuti_fallwinter$X37N,windowsize,mean,fill=NA,na.rm = TRUE)
+monterey_thres <- cuti_fallwinter %>% filter (year >= 2015 & year <= 2018) %>% 
+  ggplot(aes(x = date, y = X37N)) + geom_line() + 
+  geom_hline(yintercept = 0.5, colour = "red") + 
+  ylab("Monterey Bay CUTI Daily Value") + 
+  ggtitle("Monterey Bay CUTI Trend (July - Dec) above 0.5 m/s Threshold (smoothed)")
+
+#Cordell Bank
+cuti_fallwinter$X38N <- rollapply(cuti_fallwinter$X38N,windowsize,mean,fill=NA,na.rm = TRUE)
+cordell_thres <- cuti_fallwinter %>% filter (year >= 2015 & year <= 2018) %>% 
+  ggplot(aes(x = date, y = X38N)) + geom_line() + 
+  geom_hline(yintercept = 0.5, colour = "red") + 
+  ylab("Cordell Bank CUTI Daily Value") + 
+  ggtitle("Cordell Bank CUTI Trend (July - Dec) above 0.5 m/s Threshold (smoothed)")
+
+monterey_thres / cordell_thres
+
+
 
 
