@@ -13,6 +13,7 @@ library(lubridate)
 library(directlabels)
 library(ggplot2)
 library(mosaic)
+library(stats)
 
 ## load in entire chl_a dataset 
 ## pre-bounded based on the ranges in QGIS 
@@ -34,10 +35,11 @@ monterey_chla_avgs <- data.frame()
 for (m in 1:12) {
   month <- Monterey %>% filter (month == m)
   average <- mean(month$productivity)
-  currAverage <- data.frame(m, average)
+  sd <- sd(month$productivity)
+  currAverage <- data.frame(m, average, sd)
   monterey_chla_avgs <- rbind(monterey_chla_avgs, currAverage)
 }
-colnames(monterey_chla_avgs) <- c("month", "m_avg")
+colnames(monterey_chla_avgs) <- c("month", "m_avg", "m_sd")
 
 #calculate monthly avgs for the range of interest (2015 - 2018)
 monterey_avg <- data.frame()
@@ -45,10 +47,11 @@ for (y in 2015:2018) {
   for (m in 1:12) {
     mont <- Monterey %>% filter(year == y & month == m) 
     avg <- mean(mont$productivity)
-    curr <- data.frame(y, m,"16", avg)
+    sd <- sd(mont$productivity)
+    curr <- data.frame(y, m,"16", avg, sd)
     monterey_avg <- rbind(monterey_avg,curr)}
 }
-colnames(monterey_avg) <- c("year", "month", "day", "avg")
+colnames(monterey_avg) <- c("year", "month", "day", "avg", "sd")
 monterey_avg$date <- as.Date(with(monterey_avg, paste(year, month, day, sep = "-")), "%Y-%m-%d") 
 
 #calculate anomalies 
@@ -67,10 +70,11 @@ cordell_chla_avgs <- data.frame()
 for (m in 1:12) {
   month <- Cordell %>% filter (month == m)
   average <- mean(month$productivity)
-  currAverage <- data.frame(m, average)
+  sd <- sd(month$productivity)
+  currAverage <- data.frame(m, average, sd)
   cordell_chla_avgs <- rbind(cordell_chla_avgs, currAverage)
 }
-colnames(cordell_chla_avgs) <- c("month", "c_avg")
+colnames(cordell_chla_avgs) <- c("month", "c_avg", "sd")
 
 #calculate monthly avgs for the range of interest (2015 - 2018)
 cordell_avg <- data.frame()
@@ -78,11 +82,13 @@ for (y in 2015:2018) {
   for (m in 1:12) {
     cord <- Cordell %>% filter(year == y & month == m) 
     avg <- mean(cord$productivity)
-    curr <- data.frame(y, m,"16", avg)
+    sd <- sd(cord$productivity)
+    curr <- data.frame(y, m,"16", avg, sd)
     cordell_avg <- rbind(cordell_avg,curr)}
 }
-colnames(cordell_avg) <- c("year", "month", "day", "avg")
+colnames(cordell_avg) <- c("year", "month", "day", "avg", "sd")
 cordell_avg$date <- as.Date(with(cordell_avg, paste(year, month, day, sep = "-")), "%Y-%m-%d") 
+
 
 #calculate anomalies 
 cordell_avg$baseline <- rep(cordell_chla_avgs$c_avg, 4)
@@ -96,11 +102,13 @@ baselines <- cbind(monterey_chla_avgs, cordell_chla_avgs$c_avg)
 colnames(baselines) <- c("month", "monterey_avg", "cordell_avg")
 
 ## graph the averages compared between Cordell Bank + Monterey 
-baselines <- ggplot(data = baselines, aes(x = month, y = c(monterey_avg, cordell_avg))) + 
+baseline <- ggplot(data = baselines, aes(x = month, y = c(monterey_avg, cordell_avg))) + 
   #line for monterey avg primary productivity 
   geom_line(aes(x = month, y = monterey_avg), color = "#00BFC4") + 
+  geom_errorbar(aes(ymin = monterey_avg-sd, ymax = monterey_avg+sd)) + 
   #line for cordell avg primary productivity 
   geom_line(aes(x = month, y = cordell_avg), color = "#F8766D") + 
+  geom_errorbar(aes(ymin = cordell_avg-sd, ymax = cordell_avg+sd)) + 
   scale_x_continuous(breaks = c(1:12)) + 
   xlab("Month") + 
   ylab("Monthly Average Primary Productivity") + 
@@ -110,7 +118,7 @@ baselines <- ggplot(data = baselines, aes(x = month, y = c(monterey_avg, cordell
   geom_segment(aes(x=0.25, y=15500, xend=.75, yend=15500),size=1,color="#F8766D") + 
   annotate("text", x = 1.5, y = 15500, label = "Cordell Bank") + 
   ggtitle("Average Monthly Primary Productivity Comparision Monterey Bay vs. Cordell Bank")
-baselines
+baseline
 
 #graph Monterey anomalies 
 m_anomaly <- ggplot(data = monterey_avg, aes(x = date, y = anomaly)) + 
