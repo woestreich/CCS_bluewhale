@@ -98,26 +98,24 @@ cordell_avg$anomaly <- (cordell_avg$avg) - (cordell_avg$baseline)
 ### PLOTS ###
 
 ## combine baseline averages for both regions 
-baselines <- cbind(monterey_chla_avgs, cordell_chla_avgs$c_avg)
-colnames(baselines) <- c("month", "monterey_avg", "cordell_avg")
+baselines <- cbind(monterey_chla_avgs, cordell_chla_avgs$c_avg, cordell_chla_avgs$sd)
+colnames(baselines) <- c("month", "monterey_avg", "m_sd", "cordell_avg", "c_sd")
 
 ## graph the averages compared between Cordell Bank + Monterey 
 baseline <- ggplot(data = baselines, aes(x = month, y = c(monterey_avg, cordell_avg))) + 
   #line for monterey avg primary productivity 
   geom_line(aes(x = month, y = monterey_avg), color = "#00BFC4") + 
-  geom_errorbar(aes(ymin = monterey_avg-sd, ymax = monterey_avg+sd)) + 
   #line for cordell avg primary productivity 
   geom_line(aes(x = month, y = cordell_avg), color = "#F8766D") + 
-  geom_errorbar(aes(ymin = cordell_avg-sd, ymax = cordell_avg+sd)) + 
-  scale_x_continuous(breaks = c(1:12)) + 
+  scale_x_continuous(breaks = c(1:12)) +
   xlab("Month") + 
   ylab("Monthly Average Primary Productivity") + 
   theme_classic() + 
-  geom_segment(aes(x=0.25, y=16000, xend=.75, yend=16000),size=1,color="#00BFC4") + 
-  annotate("text", x = 1.5, y = 16000, label = "Monterey Bay") + 
-  geom_segment(aes(x=0.25, y=15500, xend=.75, yend=15500),size=1,color="#F8766D") + 
-  annotate("text", x = 1.5, y = 15500, label = "Cordell Bank") + 
-  ggtitle("Average Monthly Primary Productivity Comparision Monterey Bay vs. Cordell Bank")
+  geom_segment(aes(x=1.1, y=16000, xend= 1.5, yend=16000),size=1,color="#00BFC4") + 
+  annotate("text", x = 2.1, y = 16000, label = "Monterey Bay") + 
+  geom_segment(aes(x=1.1, y=15300, xend=1.5, yend=15300),size=1,color="#F8766D") + 
+  annotate("text", x = 2.1, y = 15300, label = "Cordell Bank") + 
+  ggtitle("Average Monthly Primary Productivity Comparision Monterey Bay vs. Cordell Bank")  
 baseline
 
 #graph Monterey anomalies 
@@ -146,3 +144,4 @@ anomalies %>%
   scale_fill_manual(name = "Region", labels = c("Monterey Bay", "Cordell Bank"), values = c("#00BFC4", "#F8766D")) + 
   ylab("Monthly Primary Productivity Anomaly from Monthly Averages") + 
   ggtitle("Monthly Primary Productivity Anomalies") 
+

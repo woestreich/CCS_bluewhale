@@ -40,32 +40,44 @@ colnames(percents) <- c('year', 'percent_monterey', 'percent_cordell')
 percents %>% filter(year >= 2015 & year <= 2018) %>%
   pivot_longer(cols = starts_with("percent"), names_to = "region", names_prefix = "percent_", values_to = "percent") %>%
   ggplot(aes(x = year, y = percent, fill = as.factor(region))) + 
-  geom_bar(stat = "identity", position = "dodge") + 
-  ylab("Percent of Days (Jul-Dec) Above 0.5 CUTI Threshold") + 
+  geom_bar(stat = "identity", position = "dodge") + xxxxx
+  ylab("Percent of Days (July-December) Above CUTI Threshold") + 
   xlab("Year") + 
-  scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#F8766D", "#00BFC4")) +
-  ggtitle("CUTI Threshold Comparision") 
+  scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#ffa360", "#3e7bad")) +
+  ggtitle("Significant CUTI Value (above threshold of 0.5) Percentages") 
 
+cuti_fallwinter$X37N <- rollapply(cuti_fallwinter$X37N,windowsize,mean,fill=NA,na.rm = TRUE)
+cuti_fallwinter$X38N <- rollapply(cuti_fallwinter$X38N,windowsize,mean,fill=NA,na.rm = TRUE)
+cuti_2015 <- cuti_fallwinter %>% filter(year == 2015)
+cuti_2016 <- cuti_fallwinter %>% filter(year == 2016)
+cuti_2017 <- cuti_fallwinter %>% filter(year == 2017)
+cuti_2018 <- cuti_fallwinter %>% filter(year == 2018)
+  
 ## plot CUTI trend w/ threshold line 
 windowsize = 10
 # Monterey Bay 
-cuti_fallwinter$X37N <- rollapply(cuti_fallwinter$X37N,windowsize,mean,fill=NA,na.rm = TRUE)
-monterey_thres <- cuti_fallwinter %>% filter (year >= 2015 & year <= 2018) %>% 
-  ggplot(aes(x = date, y = X37N)) + geom_line() + 
-  geom_hline(yintercept = 0.5, colour = "red") + 
-  ylab("Monterey Bay CUTI Daily Value") + 
-  ggtitle("Monterey Bay CUTI Trend (July - Dec) above 0.5 m/s Threshold (smoothed)")
+monterey_thres <- ggplot(cuti_fallwinter, aes(x = date, y = X37N)) + 
+  geom_line(data = cuti_2015, aes(date, X37N), color = "#3e7bad") + 
+  geom_line(data = cuti_2016, aes(date, X37N), color = "#3e7bad") + 
+  geom_line(data = cuti_2017, aes(date, X37N), color = "#3e7bad") + 
+  geom_line(data = cuti_2018, aes(date, X37N), color = "#3e7bad") + 
+  geom_hline(yintercept = 0.5, colour = "black") + 
+  scale_y_continuous(breaks = c(-1.0:2.0)) +
+  theme_classic() + 
+  ylab("CUTI Daily Value") + 
+  ggtitle("Monterey Bay CUTI Trends (July-December, 2015-2018)")
 
 #Cordell Bank
-cuti_fallwinter$X38N <- rollapply(cuti_fallwinter$X38N,windowsize,mean,fill=NA,na.rm = TRUE)
-cordell_thres <- cuti_fallwinter %>% filter (year >= 2015 & year <= 2018) %>% 
-  ggplot(aes(x = date, y = X38N)) + geom_line() + 
-  geom_hline(yintercept = 0.5, colour = "red") + 
-  ylab("Cordell Bank CUTI Daily Value") + 
-  ggtitle("Cordell Bank CUTI Trend (July - Dec) above 0.5 m/s Threshold (smoothed)")
+cordell_thres <- ggplot(cuti_fallwinter, aes(x = date, y = X388N)) + 
+  geom_line(data = cuti_2015, aes(date, X38N), color = "#ffa360") + 
+  geom_line(data = cuti_2016, aes(date, X38N), color = "#ffa360") + 
+  geom_line(data = cuti_2017, aes(date, X38N), color = "#ffa360") + 
+  geom_line(data = cuti_2018, aes(date, X38N), color = "#ffa360") +
+  geom_hline(yintercept = 0.5, colour = "black") + 
+  scale_y_continuous(breaks = c(-1.0:2.0)) +
+  theme_classic() + 
+  ylab("CUTI Daily Value") + 
+  ggtitle("Cordell Bank CUTI Trends (July-December, 2015-2018)")
 
 monterey_thres / cordell_thres
-
-
-
 

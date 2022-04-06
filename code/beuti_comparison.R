@@ -37,13 +37,13 @@ for (y in 1988:2021) {
 
 ## calculate long-term climatological mean, 5th percentile, and 95th percentile for cumulative beuti curves 
 beuti_clim <- data.frame(matrix(ncol = 4, nrow = 366))
-colnames(beuti_clim) <- c("yday","csummean","csum5pctl","csum95pctl")
+colnames(beuti_clim) <- c("yday", "csummean","csum5pctl","csum95pctl")
 for (i in 1:366) {
-  b <- beuti_daily %>% filter(yday == i)
-  beuti_clim$yday[i] <- i
-  beuti_clim$csummean[i] <- mean(b$csum,na.rm = TRUE)
-  beuti_clim$csum5pctl[i] <- quantile(b$csum,.05,na.rm = TRUE)
-  beuti_clim$csum95pctl[i] <- quantile(b$csum,.95,na.rm = TRUE)
+    b <- beuti_daily %>% filter(yday == i)
+    beuti_clim$yday[i] <- i
+    beuti_clim$csummean[i] <- mean(b$csum,na.rm = TRUE)
+    beuti_clim$csum5pctl[i] <- quantile(b$csum,.05,na.rm = TRUE)
+    beuti_clim$csum95pctl[i] <- quantile(b$csum,.95,na.rm = TRUE)
 }
 
 ## running mean to smooth
@@ -78,32 +78,32 @@ byr18$csummean <- rollapply(byr18$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
 ## Monterey 
 Monterey <- ggplot(beuti_clim, aes(yday,csummean)) +   
-  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey80") +
+  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey90") +
   #2015 line
-  geom_line(data = byr15, aes(yday,csummean), color="tomato", size=1) +
+  geom_line(data = byr15, aes(yday,csummean), color="#b6d3df", size=1) +
   #2016 line
-  geom_line(data = byr16, aes(yday,csummean), color="darkgoldenrod1", size=1) +
+  geom_line(data = byr16, aes(yday,csummean), color="#55abcd", size=1) +
   #2017 line
-  geom_line(data = byr17, aes(yday,csummean), color="forestgreen", size=1) +
+  geom_line(data = byr17, aes(yday,csummean), color="#3e7bad", size=1) +
   #2018 line
-  geom_line(data = byr18, aes(yday,csummean), color="cornflowerblue", size=1) +
+  geom_line(data = byr18, aes(yday,csummean), color="#204d8d", size=1) +
   ylab("BEUTI cumulative sum\n(mmol/m/s)") +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
   ggtitle("Monterey Bay BEUTI Trends (2015-2018)") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
-  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="tomato") + 
+  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="#b6d3df") + 
   annotate("text", x = 60, y = 3200, label = "2015") + 
-  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="darkgoldenrod1") + 
+  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="#55abcd") + 
   annotate("text", x = 60, y = 3000, label = "2016") +
-  geom_segment(aes(x=0, y=2800, xend=40, yend=2800),size=1,color="forestgreen") + 
+  geom_segment(aes(x=0, y=2800, xend=40, yend=2800),size=1,color="#3e7bad") + 
   annotate("text", x = 60, y = 2800, label = "2017") +
-  geom_segment(aes(x=0, y=2600, xend=40, yend=2600),size=1,color="cornflowerblue") +
+  geom_segment(aes(x=0, y=2600, xend=40, yend=2600),size=1,color="#204d8d") +
   annotate("text", x = 60, y = 2600, label = "2018") +
-  geom_rect(aes(xmin=0,xmax=40,ymin=3400,ymax=3600),color="grey80",fill="grey80") + 
+  geom_rect(aes(xmin=0,xmax=40,ymin=3400,ymax=3600),color="grey90",fill="grey90") + 
   annotate("text", x = 108, y = 3500, label = "Climatological 5th-95th pctl")
-Monterey 
+ 
 
 
 ## 38N ## 
@@ -163,32 +163,31 @@ byr18$csummean <- rollapply(byr18$csum,windowsize,mean,fill=NA,na.rm = TRUE)
 
 ## Cordell Bank 
 Cordell <- ggplot(beuti_clim, aes(yday,csummean)) +   
-  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey80") +
+  geom_ribbon(aes(ymin=csum5pctl,ymax=csum95pctl),fill = "grey90") +
   #2015 line
-  geom_line(data = byr15, aes(yday,csummean), color="tomato", size=1) +
+  geom_line(data = byr15, aes(yday,csummean), color="#ffbd8c", size=1) +
   #2016 line
-  geom_line(data = byr16, aes(yday,csummean), color="darkgoldenrod1", size=1) +
+  geom_line(data = byr16, aes(yday,csummean), color="#f89757", size=1) +
   #2017 line
-  geom_line(data = byr17, aes(yday,csummean), color="forestgreen", size=1) +
+  geom_line(data = byr17, aes(yday,csummean), color="#d86024", size=1) +
   #2018 line
-  geom_line(data = byr18, aes(yday,csummean), color="cornflowerblue", size=1) +
+  geom_line(data = byr18, aes(yday,csummean), color="#c93900", size=1) +
   ylab("BEUTI cumulative sum\n(mmol/m/s)") +
   xlab("Yearday") +
   theme_classic() +
   theme(legend.position = "none")  +
   ggtitle("Cordell Bank BEUTI Trends (2015-2018)") +
   theme(plot.title = element_text(hjust = 0.5)) + # center the title
-  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="tomato") + 
+  geom_segment(aes(x=0, y=3200, xend=40, yend=3200),size=1,color="#ffbd8c") + 
   annotate("text", x = 60, y = 3200, label = "2015") + 
-  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="darkgoldenrod1") + 
+  geom_segment(aes(x=0, y=3000, xend=40, yend=3000),size=1,color="#f89757") + 
   annotate("text", x = 60, y = 3000, label = "2016") +
-  geom_segment(aes(x=0, y=2800, xend=40, yend=2800),size=1,color="forestgreen") + 
+  geom_segment(aes(x=0, y=2800, xend=40, yend=2800),size=1,color="#d86024") + 
   annotate("text", x = 60, y = 2800, label = "2017") +
-  geom_segment(aes(x=0, y=2600, xend=40, yend=2600),size=1,color="cornflowerblue") +
+  geom_segment(aes(x=0, y=2600, xend=40, yend=2600),size=1,color="#c93900") +
   annotate("text", x = 60, y = 2600, label = "2018") +
-  geom_rect(aes(xmin=0,xmax=40,ymin=3400,ymax=3600),color="grey80",fill="grey80") + 
+  geom_rect(aes(xmin=0,xmax=40,ymin=3400,ymax=3600),color="grey90",fill="grey90") + 
   annotate("text", x = 108, y = 3500, label = "Climatological 5th-95th pctl")
-Cordell  
 
 ## print plots 
 Monterey + Cordell 
