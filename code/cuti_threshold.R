@@ -40,10 +40,11 @@ colnames(percents) <- c('year', 'percent_monterey', 'percent_cordell')
 percents %>% filter(year >= 2015 & year <= 2018) %>%
   pivot_longer(cols = starts_with("percent"), names_to = "region", names_prefix = "percent_", values_to = "percent") %>%
   ggplot(aes(x = year, y = percent, fill = as.factor(region))) + 
-  geom_bar(stat = "identity", position = "dodge") + xxxxx
+  geom_bar(stat = "identity", position = "dodge") + 
   ylab("Percent of Days (July-December) Above CUTI Threshold") + 
   xlab("Year") + 
   scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#ffa360", "#3e7bad")) +
+  theme_classic() +   
   ggtitle("Significant CUTI Value (above threshold of 0.5) Percentages") 
 
 cuti_fallwinter$X37N <- rollapply(cuti_fallwinter$X37N,windowsize,mean,fill=NA,na.rm = TRUE)
