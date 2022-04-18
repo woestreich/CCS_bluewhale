@@ -77,12 +77,33 @@ whales_present %>%
   slice(-c(1)) %>%
   pivot_longer(cols = starts_with("sum"), names_to = "region", names_prefix = "sum_", values_to = "sum") %>%
   ggplot(aes(x = season, y = sum, fill = as.factor(region))) + 
-  geom_bar(stat = "identity", position = "dodge") + 
+  geom_bar(stat = "identity", position = position_dodge2(reverse = TRUE)) + 
+  guides(fill = guide_legend(reverse = TRUE)) + 
   theme_classic() + 
-  ylab("Number of Days") + 
+  ylab("Number of Days Above Call Index Threshold") + 
   xlab("Season") + 
   scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#ffa360", "#3e7bad")) +
-  ggtitle("Blue Whale Presence (Number of Days Above Threshold)") 
+  ggtitle("Song Season Duration as Measured by Blue Whale Acoustic Presence") 
+
+## find standard deviation above the threshold
+
+monterey_sd <- monterey_daily %>% filter(monterey_daily$whale == TRUE) %>% group_by(season) %>% summarise(m_sd = sd(all, na.rm = TRUE))
+cordell_sd <- cordell_daily %>% filter(cordell_daily$whale == TRUE) %>% group_by(season) %>% summarise(c_sd = sd(CI, na.rm = TRUE))
+
+sd <- cbind(monterey_sd, cordell_sd$c_sd)
+colnames(sd) <- c('season', 'sd_monterey', 'sd_cordell')
+sd %>%
+  pivot_longer(cols = starts_with("sd"), names_to = "region", names_prefix = "sd_", values_to = "sd") %>%
+  ggplot(aes(x = season, y = sd, fill = as.factor(region))) + 
+  geom_bar(stat = "identity", position = position_dodge2(reverse = TRUE)) + 
+  guides(fill = guide_legend(reverse = TRUE)) + 
+  theme_classic() + 
+  ylab("Standard Deviation") + 
+  xlab("Season") + 
+  scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#ffa360", "#3e7bad")) +
+  ggtitle("Standard Deviation of Call Index Values Within Each Song Season") 
+
+
 
 ## smooth data @ 5 day resolution 
 windowsize = 5
@@ -125,6 +146,7 @@ cordell_smoothed <- ggplot(data = cordell_daily, aes(x = Date, y = CI)) +
   ggtitle("Cordell Bank Call Index (Smoothed at 5-day Resolution)") 
 
 monterey_smoothed/cordell_smoothed
+
 
 ##fancy colors 
 ## Monterey Bay Call Index 
