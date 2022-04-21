@@ -77,10 +77,11 @@ whales_present %>%
   slice(-c(1)) %>%
   pivot_longer(cols = starts_with("sum"), names_to = "region", names_prefix = "sum_", values_to = "sum") %>%
   ggplot(aes(x = season, y = sum, fill = as.factor(region))) + 
-  geom_bar(stat = "identity", position = position_dodge2(reverse = TRUE)) + 
+  geom_bar(stat = "identity", position = position_dodge2(padding = 0, reverse = TRUE)) + 
   guides(fill = guide_legend(reverse = TRUE)) + 
   theme_classic() + 
   ylab("Number of Days Above Call Index Threshold") + 
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"), legend.title = element_text(face = "bold")) + # center/bold the title
   xlab("Season") + 
   scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#ffa360", "#3e7bad")) +
   ggtitle("Song Season Duration as Measured by Blue Whale Acoustic Presence") 
@@ -128,9 +129,10 @@ monterey_smoothed <- ggplot(data = monterey_daily, aes(x = date, y = all)) +
   geom_text(data = m_peak, aes(label = format(date, "%b %d,%Y")), nudge_y = 0.015) + 
   theme_classic() + 
   scale_x_date(limits = as.Date(c("2015-10-01", "2019-05-31"))) + 
+  theme(plot.title = element_text(hjust = 0.5, face = "bold")) + # center/bold the title
   ylab("Call Index") + 
   xlab("Year") + 
-  ggtitle("Monterey Bay Call Index (Smoothed at 5-day Resolution)") 
+  ggtitle("Monterey Bay Call Index Time Series") 
 
 ## Cordell Bank Call Index 
 cordell_smoothed <- ggplot(data = cordell_daily, aes(x = Date, y = CI)) + 
@@ -141,11 +143,12 @@ cordell_smoothed <- ggplot(data = cordell_daily, aes(x = Date, y = CI)) +
   geom_text(data = c_peak, aes(label = format(Date, "%b %d,%Y")), nudge_y = 0.015) + 
   scale_x_date(limits = as.Date(c("2015-10-01", "2019-05-31"))) + 
   theme_classic() + 
+  theme(plot.title = element_text(hjust = 0.5, face = "bold")) + # center/bold the title
   ylab("Call Index") + 
   xlab("Year") + 
-  ggtitle("Cordell Bank Call Index (Smoothed at 5-day Resolution)") 
+  ggtitle("Cordell Bank Call Index Time Series") 
 
-monterey_smoothed/cordell_smoothed
+monterey_smoothed / cordell_smoothed
 
 
 ##fancy colors 

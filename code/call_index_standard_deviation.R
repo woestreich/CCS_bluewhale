@@ -57,12 +57,14 @@ cordell_daily <- mutate(cordell_daily, season = derivedFactor(
 monterey_daily <- monterey_daily %>% mutate(whale = (all >= 1.01))
 cordell_daily <- cordell_daily %>% mutate(whale = (CI >= 1.01))
 
-## find standard deviation 
-monterey_sd <- monterey_daily %>% filter(monterey_daily$whale == TRUE) %>% group_by(season) %>% summarise(m_sd = sd(all, na.rm = TRUE))
-cordell_sd <- cordell_daily %>% filter(cordell_daily$whale == TRUE) %>% group_by(season) %>% summarise(c_sd = sd(CI, na.rm = TRUE))
+## find coefficient of variance based on standard deviation/mean 
+monterey <- monterey_daily %>% filter(monterey_daily$whale == TRUE) %>% group_by(season) %>% summarise(m_sd = sd(all, na.rm = TRUE), m_mean = mean(all, na.rm = TRUE))
+monterey$cv <- (monterey$m_sd) / (monterey$m_mean) * 100 
+cordell <- cordell_daily %>% filter(cordell_daily$whale == TRUE) %>% group_by(season) %>% summarise(c_sd = sd(CI, na.rm = TRUE), c_mean = mean(CI, na.rm = TRUE))
+cordell$cv <- (cordell$c_sd) / (cordell$c_mean) * 100 
 
 ## PLOT 
-sd <- cbind(monterey_sd, cordell_sd$c_sd)
+sd <- data.frame(cbind(monterey$season, monterey$m_sd, cordell$c_sd)) 
 colnames(sd) <- c('season', 'sd_monterey', 'sd_cordell')
 sd %>%
   pivot_longer(cols = starts_with("sd"), names_to = "region", names_prefix = "sd_", values_to = "sd") %>%
@@ -74,3 +76,17 @@ sd %>%
   xlab("Season") + 
   scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#ffa360", "#3e7bad")) +
   ggtitle("Standard Deviation of Call Index Values Within Each Song Season") 
+
+cv <- data.frame(cbind(monterey$season, monterey$cv, cordell$cv)) 
+colnames(cv) <- c('season', 'cv_monterey', 'cv_cordell')
+cv %>%
+  pivot_longer(cols = starts_with("cv"), names_to = "region", names_prefix = "cv_", values_to = "cv") %>%
+  ggplot(aes(x = season, y = cv, fill = as.factor(region))) + 
+  geom_bar(stat = "identity", position = position_dodge2(reverse = TRUE)) + 
+  guides(fill = guide_legend(reverse = TRUE)) + 
+  theme_classic() + 
+  ylab("Coefficient of Variance") + 
+  xlab("Season") + 
+  scale_fill_manual(name = "Region", labels = c("Cordell Bank", "Monterey Bay"), values = c("#ffa360", "#3e7bad")) +
+  ggtitle("Coefficient of Variance of Call Index Values Within Each Song Season") 
+

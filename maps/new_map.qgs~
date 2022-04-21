@@ -26,10 +26,10 @@
     <layer-tree-layer expanded="1" source="./hydrophone_locations.csv?type=csv&amp;maxFields=10000&amp;detectTypes=yes&amp;xField=Longitude&amp;yField=Latitude&amp;crs=EPSG:4326&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no" name="hydrophone_locations" legend_exp="" providerKey="delimitedtext" id="hydrophone_locations_a68ba845_5615_4031_9549_2035cfea5786" checked="Qt::Checked">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" source="LineString?crs=EPSG:4326&amp;field=begin:double(0,0)&amp;field=end:double(0,0)&amp;uid={9ba52f0b-18cf-4ac3-920b-887f1ea0c4c4}" name="monterey" legend_exp="" providerKey="memory" id="Paths_ba38bf33_5819_4c4c_8e0f_2f2af6a0813b" checked="Qt::Checked">
+    <layer-tree-layer expanded="1" source="./monterey.shp|layername=monterey" name="monterey" legend_exp="" providerKey="ogr" id="Paths_ba38bf33_5819_4c4c_8e0f_2f2af6a0813b" checked="Qt::Checked">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" source="LineString?crs=EPSG:4326&amp;field=begin:string(0,0)&amp;field=end:string(0,0)&amp;uid={4ad032e0-7106-47e2-b5ae-b6de35421375}" name="cordell" legend_exp="" providerKey="memory" id="Paths_7cdfdc74_b849_4495_a496_600ad9ea0478" checked="Qt::Checked">
+    <layer-tree-layer expanded="1" source="./cordell.shp|layername=cordell" name="cordell" legend_exp="" providerKey="ogr" id="Paths_7cdfdc74_b849_4495_a496_600ad9ea0478" checked="Qt::Checked">
       <customproperties/>
     </layer-tree-layer>
     <layer-tree-layer expanded="1" source="./bathymetry_filtered.tif" name="bathymetry_filtered" legend_exp="" providerKey="gdal" id="bathymetry_filtered_6d6824c4_ee12_4a4e_9f6c_36471ce2bf2b" checked="Qt::Unchecked">
@@ -659,7 +659,7 @@
       <previewExpression></previewExpression>
       <mapTip></mapTip>
     </maplayer>
-    <maplayer simplifyMaxScale="1" refreshOnNotifyEnabled="0" autoRefreshEnabled="0" autoRefreshTime="0" simplifyAlgorithm="0" minScale="1e+08" readOnly="0" type="vector" wkbType="LineString" simplifyDrawingHints="1" hasScaleBasedVisibilityFlag="0" refreshOnNotifyMessage="" geometry="Line" labelsEnabled="0" maxScale="0" simplifyDrawingTol="1" styleCategories="AllStyleCategories" simplifyLocal="1">
+    <maplayer simplifyMaxScale="1" refreshOnNotifyEnabled="0" autoRefreshEnabled="0" autoRefreshTime="0" simplifyAlgorithm="0" minScale="1e+08" readOnly="0" type="vector" wkbType="MultiLineString" simplifyDrawingHints="1" hasScaleBasedVisibilityFlag="0" refreshOnNotifyMessage="" geometry="Line" labelsEnabled="0" maxScale="0" simplifyDrawingTol="1" styleCategories="AllStyleCategories" simplifyLocal="1">
       <extent>
         <xmin>-124.13420000000000698</xmin>
         <ymin>38.00249000000000166</ymin>
@@ -667,7 +667,7 @@
         <ymax>38.78005999999999887</ymax>
       </extent>
       <id>Paths_7cdfdc74_b849_4495_a496_600ad9ea0478</id>
-      <datasource>memory?geometry=LineString&amp;crs=EPSG:4326&amp;field=begin:string(0,0)&amp;field=end:string(0,0)</datasource>
+      <datasource>./cordell.shp|layername=cordell</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -689,18 +689,9 @@
         <identifier></identifier>
         <parentidentifier></parentidentifier>
         <language></language>
-        <type></type>
+        <type>dataset</type>
         <title></title>
         <abstract></abstract>
-        <contact>
-          <name></name>
-          <organization></organization>
-          <position></position>
-          <voice></voice>
-          <fax></fax>
-          <email></email>
-          <role></role>
-        </contact>
         <links/>
         <fees></fees>
         <encoding></encoding>
@@ -717,17 +708,9 @@
             <geographicflag>false</geographicflag>
           </spatialrefsys>
         </crs>
-        <extent>
-          <spatial dimensions="2" maxx="0" maxy="0" miny="0" minz="0" crs="" maxz="0" minx="0"/>
-          <temporal>
-            <period>
-              <start></start>
-              <end></end>
-            </period>
-          </temporal>
-        </extent>
+        <extent/>
       </resourceMetadata>
-      <provider encoding="">memory</provider>
+      <provider encoding="UTF-8">ogr</provider>
       <vectorjoins/>
       <layerDependencies/>
       <dataDependencies/>
@@ -886,7 +869,7 @@ def my_form_open(dialog, layer, feature):
       <previewExpression>"begin"</previewExpression>
       <mapTip></mapTip>
     </maplayer>
-    <maplayer simplifyMaxScale="1" refreshOnNotifyEnabled="0" autoRefreshEnabled="0" autoRefreshTime="0" simplifyAlgorithm="0" minScale="1e+08" readOnly="0" type="vector" wkbType="LineString" simplifyDrawingHints="1" hasScaleBasedVisibilityFlag="0" refreshOnNotifyMessage="" geometry="Line" labelsEnabled="0" maxScale="0" simplifyDrawingTol="1" styleCategories="AllStyleCategories" simplifyLocal="1">
+    <maplayer simplifyMaxScale="1" refreshOnNotifyEnabled="0" autoRefreshEnabled="0" autoRefreshTime="0" simplifyAlgorithm="0" minScale="1e+08" readOnly="0" type="vector" wkbType="MultiLineString" simplifyDrawingHints="1" hasScaleBasedVisibilityFlag="0" refreshOnNotifyMessage="" geometry="Line" labelsEnabled="0" maxScale="0" simplifyDrawingTol="1" styleCategories="AllStyleCategories" simplifyLocal="1">
       <extent>
         <xmin>-122.74410000000000309</xmin>
         <ymin>35.75122999999999962</ymin>
@@ -894,7 +877,7 @@ def my_form_open(dialog, layer, feature):
         <ymax>36.53728000000000264</ymax>
       </extent>
       <id>Paths_ba38bf33_5819_4c4c_8e0f_2f2af6a0813b</id>
-      <datasource>memory?geometry=LineString&amp;crs=EPSG:4326&amp;field=begin:double(0,0)&amp;field=end:double(0,0)</datasource>
+      <datasource>./monterey.shp|layername=monterey</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -916,18 +899,9 @@ def my_form_open(dialog, layer, feature):
         <identifier></identifier>
         <parentidentifier></parentidentifier>
         <language></language>
-        <type></type>
+        <type>dataset</type>
         <title></title>
         <abstract></abstract>
-        <contact>
-          <name></name>
-          <organization></organization>
-          <position></position>
-          <voice></voice>
-          <fax></fax>
-          <email></email>
-          <role></role>
-        </contact>
         <links/>
         <fees></fees>
         <encoding></encoding>
@@ -944,17 +918,9 @@ def my_form_open(dialog, layer, feature):
             <geographicflag>false</geographicflag>
           </spatialrefsys>
         </crs>
-        <extent>
-          <spatial dimensions="2" maxx="0" maxy="0" miny="0" minz="0" crs="" maxz="0" minx="0"/>
-          <temporal>
-            <period>
-              <start></start>
-              <end></end>
-            </period>
-          </temporal>
-        </extent>
+        <extent/>
       </resourceMetadata>
-      <provider encoding="">memory</provider>
+      <provider encoding="UTF-8">ogr</provider>
       <vectorjoins/>
       <layerDependencies/>
       <dataDependencies/>
